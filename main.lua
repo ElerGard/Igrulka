@@ -4,23 +4,32 @@ function love.load()
 	love.window.setMode( WINDOW_HEIGHT, WINDOW_WIDTH )
 	x_rectangle = 375
 	y_rectangle = 550
-	vcy = 4
-	vcx = 4
 	x_circle = 45
 	y_circle = 250
+	STATE = "Menu"
+	i = 0
+end
+
+function love.update(dt)
+if STATE == "Menu" then
+	x_circle = 45
+	y_circle = 250
+	x_rectangle = 375
+	y_rectangle = 550
 	cord = {{30,205},{30,165},{30,125},{30,85},{30,45},{30,5},{110,205},{110,165},{110,125},{110,85},
 	{110,45},{110,5},{190,205},{190,165},{190,125},{190,85},{190,45},{190,5},{270,205},{270,165},{270,125},
 	{270,85},{270,45},{270,5},{350,205},{350,165},{350,125},{350,85},{350,45},{350,5},{420,205},{420,165},
 	{420,125},{420,85},{420,45},{420,5},{500,205},{500,165},{500,125},{500,85},{500,45},{500,5},{580,205},
 	{580,165},{580,125},{580,85},{580,45},{580,5},{660,205},{660,165},{660,125},{660,85},{660,45},{660,5},
 	{740,205},{740,165},{740,125},{740,85},{740,45},{740,5}}
-	i = 0
+	vcy = math.random(3,6)
+	vcx = math.random(-3,6)
+	if (vcx == 0) or (vcx == 1) or (vcx == -1) or (vcx == 2) or (vcx == -2) then
+	vcx = math.random(-3,6)
+	end
 end
-
-function love.update(dt)
-
 	if y_circle + 5 > y_rectangle + 20 then
-		love.window.close( )
+		STATE = "Menu"
 	end
 
 	if (x_circle > x_rectangle) and (x_circle < x_rectangle + 50) and ((y_circle + 5 > y_rectangle + 20) or (y_circle + 5 > y_rectangle)) then -- Врезается в игрока и меняет скорость
@@ -70,14 +79,22 @@ function love.update(dt)
 end
 
 function love.draw()
-	love.graphics.setBackgroundColor( 0,0,6/10 )
-	love.graphics.rectangle("fill", x_rectangle,y_rectangle,50,20)
-	love.graphics.circle("fill", x_circle, y_circle, 10)
-	for i = 1, #cord do
-		love.graphics.rectangle("fill", cord[i][1],cord[i][2],50,20)
+	if STATE == "Menu" then
+		love.graphics.setBackgroundColor( 0,0,0)
+		love.graphics.print("Please click Left Button Mouse" , 0, 220)
+		love.graphics.print("You Scrore: " , 0, 250)
+		love.graphics.print(i , 70, 250)
+		
+	else
+		love.graphics.setBackgroundColor( 0,0,6/10 )
+		love.graphics.rectangle("fill", x_rectangle,y_rectangle,50,20)
+		love.graphics.circle("fill", x_circle, y_circle, 10)
+		love.graphics.print("Scrore: " , 0, 250)
+		love.graphics.print(i , 45, 250)
+		for i = 1, #cord do
+			love.graphics.rectangle("fill", cord[i][1],cord[i][2],50,20)
+		end
 	end
-	
-	love.graphics.print(i , 10, 250, 0, 2, 2)
 end
 
 function blocks()
@@ -89,3 +106,11 @@ function blocks()
 		end
 	end
 end
+
+function love.mousepressed(_,_,button,_,_)
+	if button == 1 then 
+		STATE = "Start"
+		i = 0
+	end
+end
+
